@@ -19,13 +19,12 @@ MPC Maid is a software editor for the Akai MPC 1000, MPC 2500, and MPC 500, for 
 
 # Installation
 
-Download the unique .jar from https://sourceforge.net/project/showfiles.php?group_id=252031
+Download the unique .jar directly from [Github](https://github.com/cyriux/mpcmaid/blob/master/MpcMaid/mpcmaid_beta.jar)
 
 Double-click on it, MPC Maid must show. 
 
-Get the PDF documentation here.
+Get the PDF documentation [here](https://github.com/cyriux/mpcmaid/blob/master/MpcMaid/documentation/MPCMaid_UserManual.pdf).
 
-This website for the project can be found here, and the project summary page here.
 
 # Requirements
 
