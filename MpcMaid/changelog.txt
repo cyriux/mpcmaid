@@ -1,0 +1,22 @@
+Tested on windows
+Automatic assign of samples to pads/sample layers
+Improved validation (focus + beep) 
+Added preferences (MPC500/1000, audition mode)
+Added remove sample 
+Replaced audio player with a more stable one (sometime crashes when heavily stimulated)
+Added automated support for multisamples
+Fixed frame height difference between first window and other windows
+Added Edit/Remove all samples
+Renamed Options to Preferences for non Mac OS platforms
+Added splash screen and about dialog
+Fixed bug one file name on export slices pgm
+Fixed tuning reading error
+Added protection for multisamples notes that are out of pads range (below B0 or above D6); samples with no note in their name, or outside of this range are not imported
+Added Batch Create Program feature, to create default listing programs in each directory and sub-directory from a given base directory.
+Listing program created by Batch Create Program now have a name based on the directory name, shortened to 14 chars plus the page number in case we need more than 1 page to store every sample.
+Fixed bug in set sample name (programmatically write)
+Fixed bug on Export: files longer than 16 chars with the extensions were shortened incorrectly, hence would not be played by the program
+Added Copy Settings to All Pads feature
+Added warnings when files are ignored or renamed
+Fixed bug in slicing tool: left and right arrows used to delete markers
+Complete rewriting of the sample files management, including the warnings 
