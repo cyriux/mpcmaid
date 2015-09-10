@@ -23,7 +23,7 @@ Download the unique .jar directly from [Github](https://github.com/cyriux/mpcmai
 
 Double-click on it, MPC Maid must show. 
 
-Get the PDF documentation [here](https://github.com/cyriux/mpcmaid/blob/master/MpcMaid/documentation/MPCMaid_UserManual.pdf).
+View the PDF documentation [here](https://github.com/cyriux/mpcmaid/blob/master/MpcMaid/documentation/MPCMaid_UserManual.pdf), or download it [here](https://github.com/cyriux/mpcmaid/raw/master/MpcMaid/documentation/MPCMaid_UserManual.pdf)
 
 
 # Requirements
