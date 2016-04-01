@@ -6,6 +6,11 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
+import javax.sound.sampled.AudioFormat;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.DataLine;
+
 import com.sun.media.sound.JavaSoundAudioClip;
 
 /**
@@ -40,6 +45,13 @@ public final class SamplePlayer {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+
+	public void play(byte[] data, AudioFormat format) throws Exception {
+		DataLine.Info info = new DataLine.Info(Clip.class, format);
+		Clip clip = (Clip) AudioSystem.getLine(info);
+		clip.open(format, data, 0, data.length);
+		clip.loop(0);
 	}
 
 	public String toString() {
