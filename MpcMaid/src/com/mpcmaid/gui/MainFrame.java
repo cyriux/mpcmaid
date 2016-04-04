@@ -10,6 +10,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FilenameFilter;
@@ -429,6 +431,13 @@ public final class MainFrame extends BaseFrame {
 		audioEditor = new JPanel(new BorderLayout(10, 10));
 		// audioEditor.setPreferredSize(new Dimension(900, 500));
 		audioEditor.setFocusable(true);
+		audioEditor.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				super.mouseReleased(e);
+				main.requestFocusInWindow();
+			}
+		});
 
 		final JLabel fileLabel = new JLabel(WaveformPanel.DEFAULT_FILE_DETAILS, JLabel.CENTER);
 		audioEditor.add(fileLabel, BorderLayout.NORTH);
@@ -444,7 +453,6 @@ public final class MainFrame extends BaseFrame {
 					final int sensitivity = source.getValue();
 					waveformePanel.setSensitivity(sensitivity);
 				}
-
 			}
 
 		});
