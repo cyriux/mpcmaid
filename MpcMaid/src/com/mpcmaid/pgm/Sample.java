@@ -73,7 +73,11 @@ public final class Sample {
 		if (sampleName == null || sampleName.trim().length() == 0) {
 			return null;
 		}
-		final File file = new File(path, sampleName + ".wav");
+		File file = new File(path, sampleName + ".wav");
+		if (file.exists()) {
+			return new Sample(file, sampleName, OK);
+		}
+		file = new File(path, sampleName + ".WAV");
 		if (file.exists()) {
 			return new Sample(file, sampleName, OK);
 		}
