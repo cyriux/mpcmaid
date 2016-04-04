@@ -9,6 +9,7 @@ import javax.sound.sampled.AudioFileFormat;
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 import javax.sound.sampled.DataLine;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.SourceDataLine;
@@ -63,16 +64,7 @@ public class Sample {
 	}
 
 	public void play() throws Exception {
-		final DataLine.Info info = new DataLine.Info(SourceDataLine.class, format);
-		final SourceDataLine line = (SourceDataLine) AudioSystem.getLine(info);
-
-		line.open(format);
-		line.start();
-
-		line.write(bytes, 0, bytes.length);
-
-		line.drain();
-		line.close();
+		SamplePlayer.getInstance().play(bytes, format);
 	}
 
 	public void save(File file) throws Exception {
