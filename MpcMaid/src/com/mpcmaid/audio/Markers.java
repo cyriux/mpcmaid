@@ -22,7 +22,7 @@ public class Markers {
 
 	public static final int NONE = -1;
 
-	private final List markers = new ArrayList();
+	private final List<Marker> markers = new ArrayList<Marker>();
 
 	private int selectedMarker = 0;
 
@@ -45,7 +45,7 @@ public class Markers {
 		markers.add(new Marker(adjustedZc));
 	}
 
-	public List getMarkers() {
+	public List<Marker> getMarkers() {
 		return markers;
 	}
 
@@ -65,13 +65,47 @@ public class Markers {
 		selectedMarker = sel % markers.size();
 	}
 
+	/**
+	 * Select the closest marker to given location.
+	 * @param location
+	 *           location in samples
+	 */
+	public void selectClosestMarker(final int location) {
+		if (isUnset()) {
+			return;
+		}
+		int distance = Math.abs(markers.get(0).getLocation() - location);
+		int idx = 0;
+		for (int c = 1; c < markers.size(); c++) {
+			int cdistance = Math.abs(markers.get(c).getLocation() - location);
+			if (cdistance < distance) {
+				idx = c;
+				distance = cdistance;
+			}
+		}
+		selectedMarker = idx;
+	}
+
 	public void nudgeMarker(final int ticks, Slicer adjustor) {
 		final Marker marker = getSelectedMarker();
+		int max = maxLocation;
+		int min = 0;
 		if (marker != null) {
-			if (marker.getLocation() + ticks >= maxLocation) {
-				return;
+			if (markers.size() > selectedMarker + 1) {
+				final Marker nextMarker = (Marker) markers.get(selectedMarker + 1);
+				max = nextMarker.getLocation();
 			}
-			final int location = marker.move(ticks);
+			if (selectedMarker > 0) {
+				final Marker previousMarker = (Marker) markers.get(selectedMarker - 1);
+				min = previousMarker.getLocation();
+			}
+			int location = marker.move(ticks);
+			if (marker.getLocation() + ticks >= max) {
+			    location = max;
+			}
+			if (marker.getLocation() + ticks <= min) {
+				location = min;
+			}
 			final int excursion = ticks / 2;
 			final int adjustedZc = adjustor.adjustNearestZeroCrossing(location, excursion);
 			marker.setLocation(adjustedZc);
@@ -88,8 +122,10 @@ public class Markers {
 	}
 
 	public void deleteSelectedMarker() {
-		markers.remove(selectedMarker);
-		selectedMarker--;
+		if (selectedMarker > 0) {
+			markers.remove(selectedMarker);
+			selectedMarker--;
+		}
 	}
 
 	public void insertMarker() {
