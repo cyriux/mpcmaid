@@ -1,5 +1,6 @@
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.io.File;
 import java.net.URL;
 
 import javax.swing.ImageIcon;
@@ -47,14 +48,39 @@ public final class MPCMaid {
 	}
 
 	public static void main(String[] args) {
+		// process the command line arguments
+		boolean showSplash = true;
+		String fileName = null;
+		for (String arg : args) {
+			if (arg.equals("-n")) {
+				showSplash = false;
+			} else if (arg.startsWith("-")) {
+				showHelp();
+				return;
+			} else {
+				fileName = arg;
+				break;
+			}
+		}
+		final File programFile;
+		if (fileName != null) {
+			programFile = new File(fileName);
+		} else {
+			programFile = null;
+		}
+
 		makeAsNativeAsPossible();
-		showSplash();
+		if (showSplash)
+			showSplash();
 
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
-
-				final BaseFrame baseFrame = new MainFrame();
-
+				final BaseFrame baseFrame;
+				if (programFile != null && programFile.exists()) {
+					baseFrame = new MainFrame(programFile);
+				} else {
+					baseFrame = new MainFrame();
+				}
 				// wait to show the splash
 				if (screen != null) {
 					try {
@@ -91,6 +117,13 @@ public final class MPCMaid {
 			Preferences.getInstance().load();
 		} catch (Exception ignore) {
 		}
+	}
+
+	public static final void showHelp() {
+		System.err.println("Usage: mpcmaid [-h] [-n] [<program.pgm>]");
+		System.err.println();
+		System.err.println(" -n     Do not show splash screen");
+		System.err.println(" -h     This text");
 	}
 
 	public String toString() {
