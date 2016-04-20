@@ -10,6 +10,10 @@ import java.awt.LayoutManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -17,12 +21,16 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.swing.AbstractAction;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JTabbedPane;
+import javax.swing.KeyStroke;
 
 import com.mpcmaid.pgm.Element;
 import com.mpcmaid.pgm.Layer;
@@ -69,6 +77,8 @@ public class ProgramPanel extends JPanel implements BindingCapable {
 	private final ProgramSamples samples;
 
 	private Pad currentlySelectedPad = null;
+
+	private Pad padToCopy = null;
 
 	public ProgramPanel(Program program, Profile profile, File pgmFile) {
 		this.pgm = program;
@@ -149,6 +159,68 @@ public class ProgramPanel extends JPanel implements BindingCapable {
 					button.addActionListener(listener);
 					button.addFocusListener(listener);
 					button.setTransferHandler(listener);
+					// copy & paste through popup menu
+					final JPopupMenu popup = new JPopupMenu();
+					final JMenuItem copyActionItem = new JMenuItem(new AbstractAction("Copy pad parameters") {
+
+						public void actionPerformed(ActionEvent arg0) {
+							selectPad(selectedPad, padId, button);
+							copySettings();
+							
+						}
+
+					});
+					copyActionItem.setAccelerator(KeyStroke.getKeyStroke(
+							KeyEvent.VK_C, ActionEvent.CTRL_MASK));
+					popup.add(copyActionItem);
+					final JMenuItem pasteActionItem = new JMenuItem(new AbstractAction("Paste pad parameters") {
+
+						public void actionPerformed(ActionEvent e) {
+							selectPad(selectedPad, padId, button);
+							pasteSettings();
+						}
+
+					});
+					pasteActionItem.setAccelerator(KeyStroke.getKeyStroke(
+							KeyEvent.VK_V, ActionEvent.CTRL_MASK));
+					popup.add(pasteActionItem);
+					button.addMouseListener(new MouseAdapter() {
+
+						public void mousePressed(MouseEvent e) {
+							if (e.getButton() == MouseEvent.BUTTON3) {
+								popup.show(e.getComponent(), e.getX(), e.getY());
+							}
+						}
+
+					});
+					// copy & paste through shortcuts
+					button.addKeyListener(new KeyListener() {
+
+						public void keyPressed(KeyEvent ke) {
+							switch (ke.getKeyCode()) {
+								case KeyEvent.VK_C: {
+									if (ke.isControlDown()) {
+										copySettings();
+									}
+									break;
+								}
+								case KeyEvent.VK_V: {
+									if (ke.isControlDown()) {
+										pasteSettings();
+									}
+									break;
+								}
+							}
+						}
+
+						public void keyReleased(KeyEvent e) {
+						}
+
+						public void keyTyped(KeyEvent e) {
+						}
+
+					});
+
 				}
 			}
 			final char ch = (char) ('A' + k);
@@ -248,6 +320,32 @@ public class ProgramPanel extends JPanel implements BindingCapable {
 		Iterator it = impactedPads.iterator();
 		while (it.hasNext()) {
 			refreshPadButton((Pad) it.next());
+		}
+	}
+
+	/**
+	 * Make a copy of currently selected pad for copying.
+	 */
+	public void copySettings() {
+		padToCopy = currentlySelectedPad.copy();
+	}
+
+	/**
+	 * Copy the saved pad settings to currently selected pad.
+	 */
+	public void pasteSettings() {
+		if (padToCopy != null) {
+			final HashSet ignoreParams = new HashSet();
+			ignoreParams.add(Pad.PAD_MIDI_NOTE_VALUE);
+			ignoreParams.add(Layer.TUNING);
+			currentlySelectedPad.copyFrom(padToCopy, ignoreParams);
+			// copy samples within the sample matrix
+			for (int j = 0; j < padToCopy.getLayerNumber(); j++) {
+				Layer layer = padToCopy.getLayer(j);
+				samples.set(currentlySelectedPad.getLayer(j), samples.get(layer));
+			}
+			refreshPadButton(currentlySelectedPad);
+			refreshParamsArea();
 		}
 	}
 
