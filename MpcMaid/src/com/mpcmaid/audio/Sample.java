@@ -38,9 +38,6 @@ public class Sample {
 	}
 
 	private static Sample open(final AudioInputStream audioStream) throws LineUnavailableException, IOException {
-		final DataLine.Info info = new DataLine.Info(SourceDataLine.class, audioStream.getFormat());
-		final SourceDataLine line = (SourceDataLine) AudioSystem.getLine(info);
-
 		final int frameLength = (int) audioStream.getFrameLength();
 		if (frameLength > 44100 * 8 * 2) {
 			throw new IllegalArgumentException("The audio file is too long (must be shorter than 4 bars at 50BPM)");
@@ -48,31 +45,18 @@ public class Sample {
 		final AudioFormat format = audioStream.getFormat();
 		final int frameSize = (int) format.getFrameSize();
 		final byte[] bytes = new byte[frameLength * frameSize];
-		line.open(format);
-		line.start();
 		final int result = audioStream.read(bytes);
 		if (result < 0) {
 			return null;
 		}
 
-		line.drain();
-		line.close();
 		audioStream.close();
 
 		return new Sample(bytes, format, frameLength);
 	}
 
 	public void play() throws Exception {
-		final DataLine.Info info = new DataLine.Info(SourceDataLine.class, format);
-		final SourceDataLine line = (SourceDataLine) AudioSystem.getLine(info);
-
-		line.open(format);
-		line.start();
-
-		line.write(bytes, 0, bytes.length);
-
-		line.drain();
-		line.close();
+		SamplePlayer.getInstance().play(this);
 	}
 
 	public void save(File file) throws Exception {
