@@ -69,6 +69,7 @@ import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
 
 import apple.dts.samplecode.osxadapter.OSXAdapter;
@@ -293,11 +294,15 @@ public class BaseFrame extends JFrame implements ActionListener {
 	// A quit event is triggered by Cmd-Q, selecting Quit from the application
 	// or Dock menu, or logging out
 	public boolean quit() {
-		// int option = JOptionPane.showConfirmDialog(this,
-		// "Are you sure you want to quit?", "Quit?",
-		// JOptionPane.YES_NO_OPTION);
-		// return (option == JOptionPane.YES_OPTION);
-		return true;
+		int option = JOptionPane.showConfirmDialog(this,
+				"Close all application windows?", "Quit?", JOptionPane.YES_NO_OPTION);
+		if (option == JOptionPane.YES_OPTION) {
+			dispose();
+			System.exit(0);
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	public void actionPerformed(ActionEvent e) {
