@@ -65,6 +65,8 @@ public class Slicer {
 
 		final long[] energyHistory = energyHistory(channels, windowSize, overlapRatio);
 		if (energyHistory == null || energyHistory.length < localEnergyWindowSize) {
+			// when nothing is found, insert marker at 0 position
+			markers.add(0);
 			return;
 		}
 
@@ -86,7 +88,6 @@ public class Slicer {
 				lastState = false;
 			}
 		}
-
 	}
 
 	protected int[] getSamplesL(final int[][] channels) {

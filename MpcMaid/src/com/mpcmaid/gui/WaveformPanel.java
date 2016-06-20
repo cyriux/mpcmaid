@@ -53,7 +53,6 @@ public class WaveformPanel extends JPanel {
 		this.file = file;
 		this.slicer = new Slicer(Sample.open(file), WINDOW_SIZE, OVERLAP_RATIO, AVERAGE_ENERGY_WINDOW);
 		this.markers = slicer.getMarkers();
-
 		slicer.extractMarkers();
 		repaint();
 	}
@@ -155,7 +154,6 @@ public class WaveformPanel extends JPanel {
 
 	// ---- delegate methods to the Slicer or Markers + repaint for every
 	// mutator
-
 	public void setSensitivity(final int sensitivity) {
 		slicer.setSensitivity(sensitivity);
 		repaint();
@@ -163,6 +161,18 @@ public class WaveformPanel extends JPanel {
 
 	public void selectMarker(final int shift) {
 		markers.selectMarker(shift);
+		repaint();
+	}
+
+	public void selectClosestMarker(final int mouseX) {
+		// get the location (in samples) from the mouse position
+		final int width = (int) (getWidth() - 50);
+		final int x0 = 20;
+		final double minX = 0;
+		final double maxX = slicer.getChannels()[0].length;
+		final double xScale = width / (maxX - minX);
+		final int position = (int) Math.round((mouseX - x0) / xScale);
+		markers.selectClosestMarker(position);
 		repaint();
 	}
 
@@ -241,7 +251,7 @@ public class WaveformPanel extends JPanel {
 		if (indexOf != -1) {
 			prefix = name.substring(0, indexOf);
 		}
-		prefix = name.length() > maxLen ? name.substring(0, maxLen) : name;
+		prefix = prefix.length() > maxLen ? prefix.substring(0, maxLen) : prefix;
 		return prefix;
 	}
 

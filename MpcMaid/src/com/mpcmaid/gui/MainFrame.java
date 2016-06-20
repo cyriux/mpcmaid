@@ -10,6 +10,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FilenameFilter;
@@ -459,7 +464,7 @@ public final class MainFrame extends BaseFrame {
 		// BOTTOM ZONE
 		final JPanel bottom = new JPanel(new BorderLayout());
 		final JLabel explanations = new JLabel(
-				"Shortcuts: Up-Down: Prev-Next Marker  \t  Alt/Shift+Left/Right: Nudge Marker  \t  Space: Play Marker  \t  Backspace: Delete Marker \t  Enter: Insert Marker",
+				"Shortcuts: Left-Right: Prev-Next Marker  \t  Alt/Shift+Left/Right: Nudge Marker  \t  Space: Play Marker  \t  Backspace/Delete: Delete Marker \t  Enter: Insert Marker",
 				JLabel.CENTER);
 		explanations.setFont(MEDIUM_FONT);
 		bottom.add(explanations, BorderLayout.SOUTH);
@@ -521,71 +526,104 @@ public final class MainFrame extends BaseFrame {
 		main.addTab("Program Editor", programEditor);
 		main.addTab("Chop Slices", audioEditor);
 
-		main.addKeyListener(new KeyListener() {
+		waveformePanel.addKeyListener(new KeyListener() {
 
 			public void keyPressed(KeyEvent ke) {
 				if (!waveformePanel.isReady()) {
 					return;
 				}
 				switch (ke.getKeyCode()) {
-				case KeyEvent.VK_LEFT: {
-					if (ke.isShiftDown()) {
-						waveformePanel.nudgeMarker(-1000);
+					case KeyEvent.VK_LEFT: {
+						if (ke.isShiftDown()) {
+							waveformePanel.nudgeMarker(-1000);
+						} else if (ke.isAltDown()) {
+							waveformePanel.nudgeMarker(-100);
+						} else {
+							waveformePanel.selectMarker(-1);
+						}
+						final int location = waveformePanel.getSelectedMarkerLocation();
+						currentMarkerLocation.setText("Marker location: " + location + " samples");
 						break;
 					}
-					if (ke.isAltDown()) {
-						waveformePanel.nudgeMarker(-100);
+					case KeyEvent.VK_RIGHT: {
+						if (ke.isShiftDown()) {
+							waveformePanel.nudgeMarker(+1000);
+						} else if (ke.isAltDown()) {
+							waveformePanel.nudgeMarker(+100);
+						} else {
+							waveformePanel.selectMarker(+1);
+						}
+						final int location = waveformePanel.getSelectedMarkerLocation();
+						currentMarkerLocation.setText("Marker location: " + location + " samples");
 						break;
 					}
-					break;
-				}
-				case KeyEvent.VK_RIGHT: {
-					if (ke.isShiftDown()) {
-						waveformePanel.nudgeMarker(+1000);
+					case KeyEvent.VK_BACK_SPACE:
+					case KeyEvent.VK_DELETE:
+					{
+						waveformePanel.deleteSelectedMarker();
+						final int location = waveformePanel.getSelectedMarkerLocation();
+						currentMarkerLocation.setText("Marker location: " + location + " samples");
 						break;
 					}
-					if (ke.isAltDown()) {
-						waveformePanel.nudgeMarker(+100);
+					case KeyEvent.VK_ENTER: {
+						waveformePanel.insertMarker();
+						final int location = waveformePanel.getSelectedMarkerLocation();
+						currentMarkerLocation.setText("Marker location: " + location + " samples");
 						break;
 					}
-					break;
-				}
-				case KeyEvent.VK_BACK_SPACE: {
-					waveformePanel.deleteSelectedMarker();
-					break;
-				}
-				case KeyEvent.VK_ENTER: {
-					waveformePanel.insertMarker();
-					break;
-				}
-				case KeyEvent.VK_UP: {
-					waveformePanel.selectMarker(+1);
-					final int location = waveformePanel.getSelectedMarkerLocation();
-					currentMarkerLocation.setText("Marker location: " + location + " samples");
-					break;
-				}
-				case KeyEvent.VK_DOWN: {
-					waveformePanel.selectMarker(-1);
-					final int location = waveformePanel.getSelectedMarkerLocation();
-					currentMarkerLocation.setText("Marker location: " + location + " samples");
-					break;
-				}
-				case KeyEvent.VK_SPACE: {
-					try {
-						waveformePanel.getSelectedSlice().play();
-					} catch (Throwable e) {
-						e.printStackTrace();
+					case KeyEvent.VK_SPACE: {
+						try {
+							waveformePanel.getSelectedSlice().play();
+						} catch (Throwable e) {
+							e.printStackTrace();
+						}
+						break;
 					}
-					break;
 				}
-				}
-
 			}
 
 			public void keyReleased(KeyEvent e) {
 			}
 
 			public void keyTyped(KeyEvent e) {
+			}
+
+		});
+
+		// FOCUS SLICER ON CLICK
+		waveformePanel.addMouseListener(new MouseAdapter() {
+
+			@Override
+			public void mousePressed(MouseEvent e) {
+				if (!waveformePanel.isReady()) {
+					return;
+				}
+				super.mouseReleased(e);
+				waveformePanel.requestFocusInWindow();
+				waveformePanel.selectClosestMarker(e.getX());
+				final int location = waveformePanel.getSelectedMarkerLocation();
+				currentMarkerLocation.setText("Marker location: " + location + " samples");
+			}
+
+		});
+		audioEditor.addMouseListener(new MouseAdapter() {
+
+			public void mousePressed(MouseEvent e) {
+				super.mouseReleased(e);
+				waveformePanel.requestFocusInWindow();
+			}
+
+		});
+		// NUDGE WITH MOUSE WHEEL
+		waveformePanel.addMouseWheelListener(new MouseWheelListener() {
+
+			public void mouseWheelMoved(MouseWheelEvent e) {
+				if (!waveformePanel.isReady()) {
+					return;
+				}
+				waveformePanel.nudgeMarker(-100 * e.getWheelRotation());
+				final int location = waveformePanel.getSelectedMarkerLocation();
+				currentMarkerLocation.setText("Marker location: " + location + " samples");
 			}
 
 		});
