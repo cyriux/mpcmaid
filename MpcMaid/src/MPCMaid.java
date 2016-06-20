@@ -25,17 +25,18 @@ public final class MPCMaid {
 	public static void showSplash() {
 		screen = new JWindow();
 		final URL resource = MainFrame.class.getResource("mpcmaidlogo400_400.png");
-		screen.getContentPane().add(new JLabel(new ImageIcon(resource)));
+		final JLabel label = new JLabel(new ImageIcon(resource));
+		screen.getContentPane().add(label);
 		screen.setLocationRelativeTo(null);
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		Dimension labelSize = screen.getPreferredSize();
-		screen.setLocation((int) -40, -20);
 		screen
 				.setLocation(screenSize.width / 2 - (labelSize.width / 2), screenSize.height / 2
 						- (labelSize.height / 2));
-
 		screen.pack();
 		screen.setVisible(true);
+		label.repaint();
+		screen.repaint();
 	}
 
 	public static void hideSplash() {
@@ -43,6 +44,7 @@ public final class MPCMaid {
 			return;
 		}
 		screen.setVisible(false);
+		screen.dispose();
 		screen = null;
 	}
 
