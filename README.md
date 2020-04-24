@@ -2,6 +2,8 @@
 
 ![](https://github.com/cyriux/mpcmaid/blob/master/MpcMaid/packaging/icon128.png)
 
+![Java CI with Maven](https://github.com/malkav30/mpcmaid/workflows/Java%20CI%20with%20Maven/badge.svg)
+
 MPC Maid is a software editor for the Akai MPC 1000, MPC 2500, and MPC 500, for Mac, PC, and other platforms (Java) 
 
 - Switch between the MPC 500 12-pads layout or the MPC 1000 16-pads layout (also takes care of the correct number of filters and sliders thanks to the built-in machine profiles).
