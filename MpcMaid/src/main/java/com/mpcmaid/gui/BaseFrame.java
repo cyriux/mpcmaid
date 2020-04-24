@@ -84,6 +84,8 @@ import com.mpcmaid.audio.SamplePlayer;
  */
 public class BaseFrame extends JFrame implements ActionListener {
 
+	private static final long serialVersionUID = -8081595568054819394L;
+
 	protected static int windowCounter = -1;
 
 	protected JDialog aboutBox, prefs;
@@ -195,7 +197,7 @@ public class BaseFrame extends JFrame implements ActionListener {
 		int offset = 0;
 		if ((windowCounter % 10) > 0) {
 			offset = ((windowCounter) % 10) * 20 + 20;
-			this.setLocation(new Double(getLocation().getX() + offset - 20).intValue(), new Double(getLocation().getY()
+			this.setLocation(Double.valueOf(getLocation().getX() + offset - 20).intValue(), Double.valueOf(getLocation().getY()
 					+ offset).intValue());
 		}
 
@@ -331,7 +333,7 @@ public class BaseFrame extends JFrame implements ActionListener {
 	}
 
 	public void newWindow() {
-		new BaseFrame().show();
+		new BaseFrame().setVisible(true);
 	}
 
 	public void open() {
@@ -365,12 +367,6 @@ public class BaseFrame extends JFrame implements ActionListener {
 	public void export() {
 		System.out.println(getTitle());
 		System.out.println("Export...");
-	}
-
-	public void loadFile(String path) {
-		// only supported if installed via an app bundle
-		final File file = new File(path);
-		System.out.println("load: " + path);
 	}
 
 	public String toString() {

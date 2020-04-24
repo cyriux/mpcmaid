@@ -25,9 +25,9 @@ public final class ExportCommand implements SampleCommand {
 	}
 
 	public Object execute(SampleMatrix matrix) {
-		final Iterator it = matrix.collectAll().iterator();
+		final Iterator<Sample> it = matrix.collectAll().iterator();
 		while (it.hasNext()) {
-			Sample sample = (Sample) it.next();
+			Sample sample = it.next();
 			expected++;
 			try {
 				sample.copyTo(dir);

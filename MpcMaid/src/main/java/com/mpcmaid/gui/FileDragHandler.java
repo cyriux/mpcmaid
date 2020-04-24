@@ -14,14 +14,17 @@ import javax.swing.TransferHandler;
  * 
  * @author cyrille martraire
  */
+@SuppressWarnings("unchecked")
 public class FileDragHandler extends TransferHandler {
+
+	private static final long serialVersionUID = 2989210654686012401L;
 
 	public boolean importData(JComponent c, Transferable data) {
 		if (!canImport(c, data.getTransferDataFlavors())) {
 			return false;
 		}
 		try {
-			final List files = (List) data.getTransferData(DataFlavor.javaFileListFlavor);
+			final List<File> files = (List<File>) data.getTransferData(DataFlavor.javaFileListFlavor);
 			process(files);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -30,9 +33,9 @@ public class FileDragHandler extends TransferHandler {
 		return true;
 	}
 
-	protected void process(List files) {
+	protected void process(List<File> files) {
 		for (int i = 0; i < files.size(); i++) {
-			File file = (File) files.get(i);
+			File file = files.get(i);
 			process(file);
 		}
 	}

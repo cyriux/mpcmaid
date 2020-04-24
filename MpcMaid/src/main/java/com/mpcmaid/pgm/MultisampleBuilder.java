@@ -22,7 +22,7 @@ public class MultisampleBuilder {
 
 	private final int padNumber = 64;
 
-	private final Collection warnings = new ArrayList();
+	private final Collection<String> warnings = new ArrayList<>();
 
 	private static final String[] NOTES = { "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B" };
 
@@ -32,7 +32,7 @@ public class MultisampleBuilder {
 	 * @param sampleNames
 	 *            A list of String of the sample names without extension
 	 */
-	public Slot[] assign(List samples) {
+	public Slot[] assign(List<Sample> samples) {
 		try {
 			return asssignBare(samples);
 		} catch (Exception e) {
@@ -44,9 +44,9 @@ public class MultisampleBuilder {
 	/**
 	 * Converts a list of samples into a list of filenames without extension
 	 */
-	private static List sampleNames(List samples) {
-		final List list = new ArrayList();
-		Iterator it = samples.iterator();
+	private static List<String> sampleNames(List<Sample> samples) {
+		final List<String> list = new ArrayList<>();
+		Iterator<Sample> it = samples.iterator();
 		while (it.hasNext()) {
 			final Sample sample = (Sample) it.next();
 			final String sampleName = sample.getSampleName();
@@ -56,23 +56,23 @@ public class MultisampleBuilder {
 		return list;
 	}
 
-	public Collection getWarnings() {
+	public Collection<String> getWarnings() {
 		return warnings;
 	}
 
-	private Slot[] asssignBare(List samples) {
+	private Slot[] asssignBare(List<Sample> samples) {
 		if (samples.size() < 2) {
 			return null;
 		}
 
-		final List sampleNames = sampleNames(samples);
+		final List<String> sampleNames = sampleNames(samples);
 		final int commonIndex = longuestPrefix(sampleNames);
 		if (commonIndex == 0) {
 			return null;
 		}
 
 		// build slots, returns a sorted list
-		final List slots = collectSlots(samples, commonIndex);
+		final List<Slot> slots = collectSlots(samples, commonIndex);
 		if (slots.size() <= 2) {
 			return null;
 		}
@@ -80,9 +80,9 @@ public class MultisampleBuilder {
 		// interpolate notes in between
 		final Slot[] multisample = new Slot[64];
 		Slot last = null;
-		Iterator it = slots.iterator();
+		Iterator<Slot> it = slots.iterator();
 		while (it.hasNext()) {
-			final Slot slot = (Slot) it.next();
+			final Slot slot = it.next();
 			final int note = slot.getNote();
 
 			// fill exact slot first, to be sure it wins
@@ -133,11 +133,11 @@ public class MultisampleBuilder {
 		return multisample;
 	}
 
-	protected List collectSlots(final List samples, int commonIndex) {
-		final List slots = new ArrayList();
-		Iterator it = samples.iterator();
+	protected List<Slot> collectSlots(final List<Sample> samples, int commonIndex) {
+		final List<Slot> slots = new ArrayList<>();
+		Iterator<Sample> it = samples.iterator();
 		while (it.hasNext()) {
-			final Sample sample = (Sample) it.next();
+			final Sample sample = it.next();
 
 			final String word = sample.getSampleName();
 			final String variablePart = word.substring(commonIndex);
@@ -154,12 +154,12 @@ public class MultisampleBuilder {
 		return slots;
 	}
 
-	protected static int longuestPrefix(final List words) {
+	protected static int longuestPrefix(final List<String> words) {
 		int commonIndex = 16;// max
 		String last = null;
-		Iterator it = words.iterator();
+		Iterator<String> it = words.iterator();
 		while (it.hasNext()) {
-			String word = (String) it.next();
+			String word = it.next();
 			if (last != null) {
 				final int index = longuestPrefix(commonIndex, word, last);
 				if (index < commonIndex) {
@@ -218,7 +218,7 @@ public class MultisampleBuilder {
 	 * 
 	 * @author cyrille martraire
 	 */
-	public class Slot implements Comparable {
+	public class Slot implements Comparable<Slot> {
 
 		private final Object source;
 
@@ -249,8 +249,8 @@ public class MultisampleBuilder {
 			return tuning;
 		}
 
-		public int compareTo(Object o) {
-			final Slot other = (Slot) o;
+		public int compareTo(Slot o) {
+			final Slot other = o;
 			return note - other.note;
 		}
 

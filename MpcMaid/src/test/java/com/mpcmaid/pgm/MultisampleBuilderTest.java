@@ -12,15 +12,15 @@ import com.mpcmaid.pgm.MultisampleBuilder.Slot;
 public class MultisampleBuilderTest extends TestCase {
 
 	public void testNoteName() throws Exception {
-		final List filenames = collectFileNames(1);
+		final List<String> filenames = collectFileNames(1);
 
 		final int commonIndex = MultisampleBuilder.longuestPrefix(filenames);
 		// System.out.println(commonIndex);
 
 		int i = 35;
-		Iterator it = filenames.iterator();
+		Iterator<String> it = filenames.iterator();
 		while (it.hasNext()) {
-			String word = (String) it.next();
+			String word = it.next();
 			final String variablePart = word.substring(commonIndex);
 			final int note = MultisampleBuilder.extractNote(variablePart);
 			// System.out.println(note);
@@ -34,8 +34,8 @@ public class MultisampleBuilderTest extends TestCase {
 	}
 
 	public void testAssignment() throws Exception {
-		final List filenames = collectFileNames(4);
-		final List samples = toSamples(filenames);
+		final List<String> filenames = collectFileNames(4);
+		final List<Sample> samples = toSamples(filenames);
 
 		final MultisampleBuilder builder = new MultisampleBuilder();
 		final Slot[] multisample = builder.assign(samples);
@@ -46,8 +46,8 @@ public class MultisampleBuilderTest extends TestCase {
 		}
 	}
 
-	private static List collectFileNames(int step) {
-		final List list = new ArrayList();
+	private static List<String> collectFileNames(int step) {
+		final List<String> list = new ArrayList<>();
 		for (int i = 0; i < 64; i += step) {
 			final int k = 35 + i;
 			final String noteName = MultisampleBuilder.noteName(k);
@@ -62,11 +62,11 @@ public class MultisampleBuilderTest extends TestCase {
 		return list;
 	}
 
-	protected final static List toSamples(final List fileNames) {
-		final List list = new ArrayList();
-		final Iterator it = fileNames.iterator();
+	protected final static List<Sample> toSamples(final List<String> fileNames) {
+		final List<Sample> list = new ArrayList<>();
+		final Iterator<String> it = fileNames.iterator();
 		while (it.hasNext()) {
-			final String fileName = (String) it.next();
+			final String fileName = it.next();
 			final Sample sample = toSample(fileName);
 			System.out.println(sample);
 			list.add(sample);

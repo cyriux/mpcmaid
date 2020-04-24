@@ -12,7 +12,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.awt.image.BufferedImage;
@@ -50,7 +49,10 @@ import com.mpcmaid.pgm.Program;
  * 
  * @author cyrille martraire
  */
+@SuppressWarnings("unused")
 public final class MainFrame extends BaseFrame {
+
+	private static final long serialVersionUID = 8514219423131647433L;
 
 	private static final int FRAME_WIDTH = 900;
 
@@ -179,7 +181,7 @@ public final class MainFrame extends BaseFrame {
 
 	public void newWindow() {
 		final MainFrame newFrame = new MainFrame();
-		newFrame.show();
+		newFrame.setVisible(true);
 	}
 
 	public void open() {
@@ -204,7 +206,7 @@ public final class MainFrame extends BaseFrame {
 			System.out.println(filePath);
 			final File pgmFile = new File(filePath);
 			final MainFrame newFrame = new MainFrame(pgmFile);
-			newFrame.show();
+			newFrame.setVisible(true);
 		}
 	}
 
@@ -368,7 +370,7 @@ public final class MainFrame extends BaseFrame {
 		// profile selection
 		final JLabel profileLabel = new JLabel("<html>MPC Profile (not effective for current windows)</html>",
 				JLabel.RIGHT);
-		final JComboBox profileCombo = new JComboBox(
+		final JComboBox<String> profileCombo = new JComboBox<>(
 				new String[] { Profile.MPC1000.getName(), Profile.MPC500.getName() });
 		profileCombo.setEditable(false);
 		final Preferences preferences = Preferences.getInstance();
@@ -390,7 +392,7 @@ public final class MainFrame extends BaseFrame {
 		// audition mode
 		final JLabel auditionLabel = new JLabel(
 				"<html>Audition mode(select which sample to play when pressing a pad)</html>", JLabel.RIGHT);
-		final JComboBox auditionCombo = new JComboBox(ProgramSamples.AUDITION_MODES);
+		final JComboBox<String> auditionCombo = new JComboBox<>(ProgramSamples.AUDITION_MODES);
 		auditionCombo.setEditable(false);
 		final int currentAudition = preferences.getAuditionSamples();
 		auditionCombo.setSelectedIndex(currentAudition);
@@ -481,7 +483,7 @@ public final class MainFrame extends BaseFrame {
 		final JButton exportSlicesButton = new JButton("Export");
 		exportZone.add(exportSlicesButton);
 		exportSlicesButton.setFocusable(false);
-		exportSlicesButton.enable(false);
+		exportSlicesButton.setEnabled(false);
 		exportSlicesButton.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
@@ -502,13 +504,15 @@ public final class MainFrame extends BaseFrame {
 		audioEditor.add(bottom, BorderLayout.SOUTH);
 		waveformePanel.setTransferHandler(new FileDragHandler() {
 
+			private static final long serialVersionUID = -4822099780010064290L;
+
 			protected void process(File file) {
 				try {
 					waveformePanel.setAudioFile(file);
 					final String name = file.getName();
 					exportPrefix.setText(WaveformPanel.prefixProposal(file.getName(), FILE_MAX_LENGTH - 2));
 					fileLabel.setText(waveformePanel.getFileDetails());
-					exportSlicesButton.enable(waveformePanel.hasBeat());
+					exportSlicesButton.setEnabled(waveformePanel.hasBeat());
 					audioEditor.repaint();
 				} catch (IllegalArgumentException e) {
 					JOptionPane.showMessageDialog(waveformePanel, e.getMessage(), "Unsupported file",
@@ -631,9 +635,11 @@ public final class MainFrame extends BaseFrame {
 		// SUPPORT DROP PGM FILES
 		main.setTransferHandler(new FileDragHandler() {
 
+			private static final long serialVersionUID = 712227010818715230L;
+
 			protected void process(File file) {
 				final MainFrame newFrame = new MainFrame(file);
-				newFrame.show();
+				newFrame.setVisible(true);
 			}
 
 		});

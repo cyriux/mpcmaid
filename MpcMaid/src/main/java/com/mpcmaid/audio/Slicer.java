@@ -211,8 +211,8 @@ public class Slicer {
 	/**
 	 * Exports each slice as defined by the markers into a slice file
 	 */
-	public List exportSlices(File path, String prefix) throws Exception {
-		final List files = new ArrayList();
+	public List<File> exportSlices(File path, String prefix) throws Exception {
+		final List<File> files = new ArrayList<>();
 		final int n = markers.size();
 		for (int i = 0; i < n; i++) {
 			final Sample slice = getSlice(i);

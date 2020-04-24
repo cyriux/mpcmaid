@@ -52,7 +52,10 @@ import com.mpcmaid.pgm.command.SimpleAssignCommand;
  * 
  * @author cyrille martraire
  */
+@SuppressWarnings("unused")
 public class ProgramPanel extends JPanel implements BindingCapable {
+
+	private static final long serialVersionUID = -2447341386033109052L;
 
 	private static final String[] ASSIGN_CHOICES2 = { "Cancel", "Sample", "Pad", "Multisample" };
 
@@ -141,6 +144,8 @@ public class ProgramPanel extends JPanel implements BindingCapable {
 
 					final PadListener listener = new PadListener() {
 
+						private static final long serialVersionUID = 1865046902781631523L;
+
 						public void actionPerformed(ActionEvent arg0) {
 							samples.play(selectedPad);
 						}
@@ -149,7 +154,7 @@ public class ProgramPanel extends JPanel implements BindingCapable {
 							selectPad(selectedPad, padId, button);
 						}
 
-						protected void process(List files) {
+						protected void process(List<File> files) {
 							selectPad(selectedPad, padId, button);
 							assignSounds(selectedPad, files);
 							load();
@@ -163,6 +168,8 @@ public class ProgramPanel extends JPanel implements BindingCapable {
 					final JPopupMenu popup = new JPopupMenu();
 					final JMenuItem copyActionItem = new JMenuItem(new AbstractAction("Copy pad parameters") {
 
+						private static final long serialVersionUID = 1182625432047482131L;
+
 						public void actionPerformed(ActionEvent arg0) {
 							selectPad(selectedPad, padId, button);
 							copySettings();
@@ -174,6 +181,8 @@ public class ProgramPanel extends JPanel implements BindingCapable {
 							KeyEvent.VK_C, ActionEvent.CTRL_MASK));
 					popup.add(copyActionItem);
 					final JMenuItem pasteActionItem = new JMenuItem(new AbstractAction("Paste pad parameters") {
+
+						private static final long serialVersionUID = 7323561055754542910L;
 
 						public void actionPerformed(ActionEvent e) {
 							selectPad(selectedPad, padId, button);
@@ -247,7 +256,7 @@ public class ProgramPanel extends JPanel implements BindingCapable {
 		}
 	}
 
-	public void assignSounds(Pad pad, List files) {
+	public void assignSounds(Pad pad, List<File> files) {
 		if (files.size() < 2) {
 			doAssignSamples(pad, files, false);
 			return;
@@ -284,9 +293,9 @@ public class ProgramPanel extends JPanel implements BindingCapable {
 		}
 	}
 
-	private void doMultisample(List files) {
+	private void doMultisample(List<File> files) {
 		final MultiSampleCommand command = new MultiSampleCommand(Sample.RENAMED, files, pgm);
-		final List impactedPads = (List) command.execute(samples);
+		final List<Pad> impactedPads = (List<Pad>) command.execute(samples);
 
 		refreshImpactedPads(impactedPads);
 
@@ -297,9 +306,9 @@ public class ProgramPanel extends JPanel implements BindingCapable {
 
 	}
 
-	private void doAssignSamples(Pad pad, List files, final boolean perPad) {
+	private void doAssignSamples(Pad pad, List<File> files, final boolean perPad) {
 		final SimpleAssignCommand command = new SimpleAssignCommand(Sample.RENAMED, files, pad, perPad);
-		final Collection impactedPads = (Collection) command.execute(samples);
+		final Collection<Pad> impactedPads = (Collection<Pad>) command.execute(samples);
 
 		refreshImpactedPads(impactedPads);
 
@@ -316,8 +325,8 @@ public class ProgramPanel extends JPanel implements BindingCapable {
 		JOptionPane.showMessageDialog(this, msg);
 	}
 
-	private void refreshImpactedPads(final Collection impactedPads) {
-		Iterator it = impactedPads.iterator();
+	private void refreshImpactedPads(final Collection<Pad> impactedPads) {
+		Iterator<Pad> it = impactedPads.iterator();
 		while (it.hasNext()) {
 			refreshPadButton((Pad) it.next());
 		}
@@ -335,7 +344,7 @@ public class ProgramPanel extends JPanel implements BindingCapable {
 	 */
 	public void pasteSettings() {
 		if (padToCopy != null) {
-			final HashSet ignoreParams = new HashSet();
+			final HashSet<Parameter> ignoreParams = new HashSet<>();
 			ignoreParams.add(Pad.PAD_MIDI_NOTE_VALUE);
 			ignoreParams.add(Layer.TUNING);
 			currentlySelectedPad.copyFrom(padToCopy, ignoreParams);
@@ -359,12 +368,12 @@ public class ProgramPanel extends JPanel implements BindingCapable {
 			return;
 		}
 		try {
-			final HashSet ignoreParams = new HashSet();
+			final HashSet<Parameter> ignoreParams = new HashSet<>();
 			ignoreParams.add(Pad.PAD_MIDI_NOTE_VALUE);
 			ignoreParams.add(Layer.SAMPLE_NAME);
 			ignoreParams.add(Layer.TUNING);
 
-			final Collection impactedPads = new ArrayList();
+			final Collection<Pad> impactedPads = new ArrayList<>();
 			for (int i = 0; i < 4 * profile.getPadNumber(); i++) {
 				final Pad pad = pgm.getPad(i);
 				pad.copyFrom(currentlySelectedPad, ignoreParams);
@@ -400,13 +409,13 @@ public class ProgramPanel extends JPanel implements BindingCapable {
 	}
 
 	public void removeAllSamples() {
-		final Collection impactedPads = samples.removeAllSamples(pgm);
+		final Collection<Pad> impactedPads = samples.removeAllSamples(pgm);
 		refreshImpactedPads(impactedPads);
 		// selectPad(selectedPad, padId, button);
 	}
 
 	public void setChromatic() {
-		final Collection impactedPads = new ArrayList();
+		final Collection<Pad> impactedPads = new ArrayList<>();
 		final int padNumber = pgm.getPadNumber();
 		for (int i = 0; i < padNumber; i++) {
 			final Pad pad = pgm.getPad(i);
@@ -460,6 +469,8 @@ public class ProgramPanel extends JPanel implements BindingCapable {
 		final Slider slider = pgm.getSlider(i);
 		final WidgetPanel area = new WidgetPanel(slider) {
 
+			private static final long serialVersionUID = -5428368980591121800L;
+
 			public void make() {
 				add(new JLabel(""));
 				super.make();
@@ -491,6 +502,8 @@ public class ProgramPanel extends JPanel implements BindingCapable {
 	private Component makePadArea(Element element) {
 		final WidgetPanel area = new WidgetPanel(element) {
 
+			private static final long serialVersionUID = -1482444822047248775L;
+
 			public void make() {
 				// add(new JLabel(""));
 				super.make();
@@ -518,6 +531,8 @@ public class ProgramPanel extends JPanel implements BindingCapable {
 			final Layer layer = pad.getLayer(i);
 			final int layerIndex = i;
 			final WidgetPanel area = new WidgetPanel(layer) {
+
+				private static final long serialVersionUID = -5678698667326900109L;
 
 				public void make() {
 					final String layerLabel = "Sample Layer " + (layerIndex + 1);
@@ -628,6 +643,8 @@ public class ProgramPanel extends JPanel implements BindingCapable {
 	 * @author cyrille martraire
 	 */
 	protected static final class SamplePanel extends JPanel implements BindingCapable {
+
+		private static final long serialVersionUID = 2008068001960565405L;
 
 		private Pad pad;
 

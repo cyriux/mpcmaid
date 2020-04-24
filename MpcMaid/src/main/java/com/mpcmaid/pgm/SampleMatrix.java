@@ -44,8 +44,8 @@ public class SampleMatrix {
 		}
 	}
 
-	public List collectAll() {
-		final List list = new ArrayList();
+	public List<Sample> collectAll() {
+		final List<Sample> list = new ArrayList<>();
 		for (int i = 0; i < cells.length; i++) {
 			final Sample[] layers = cells[i];
 			for (int j = 0; j < layers.length; j++) {

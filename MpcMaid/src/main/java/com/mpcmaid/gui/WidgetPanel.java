@@ -24,6 +24,8 @@ import com.mpcmaid.pgm.Parameter.RangeType;
  */
 public class WidgetPanel extends JPanel implements BindingCapable {
 
+	private static final long serialVersionUID = -8139985486559953248L;
+
 	private final Element element;
 
 	public WidgetPanel(Element element) {
@@ -61,7 +63,7 @@ public class WidgetPanel extends JPanel implements BindingCapable {
 		}
 	}
 
-	protected void addWidget(final Widget widget) {
+	protected void addWidget(final Widget<?> widget) {
 		add(widget);
 	}
 

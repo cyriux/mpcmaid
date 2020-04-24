@@ -15,7 +15,8 @@ import java.io.InputStream;
  * 
  * @author cyrille martraire
  */
-public class Program extends BaseElement {
+@SuppressWarnings("unused")
+ public class Program extends BaseElement {
 
 	// ------------- HEADER ------
 	private static final short FILE_LENGTH = 0x2A04;

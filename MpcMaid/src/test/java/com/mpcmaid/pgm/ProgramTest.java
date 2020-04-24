@@ -2,13 +2,6 @@ package com.mpcmaid.pgm;
 
 import java.io.File;
 
-import com.mpcmaid.pgm.Pad;
-import com.mpcmaid.pgm.PadMixer;
-import com.mpcmaid.pgm.Program;
-import com.mpcmaid.pgm.Range;
-import com.mpcmaid.pgm.Layer;
-import com.mpcmaid.pgm.Slider;
-
 import junit.framework.TestCase;
 
 public class ProgramTest extends TestCase {

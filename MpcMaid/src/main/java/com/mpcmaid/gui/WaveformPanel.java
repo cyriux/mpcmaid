@@ -25,6 +25,8 @@ import com.mpcmaid.pgm.Program;
  */
 public class WaveformPanel extends JPanel {
 
+	private static final long serialVersionUID = -1728002082575891020L;
+
 	private static final int AVERAGE_ENERGY_WINDOW = 43;
 
 	private static final int OVERLAP_RATIO = 1;
@@ -131,11 +133,11 @@ public class WaveformPanel extends JPanel {
 			oldY = y;
 		}
 
-		Iterator it = markers.getMarkers().iterator();
+		Iterator<Marker> it = markers.getMarkers().iterator();
 		final int selectedMarkerIndex = markers.getSelectedMarkerIndex();
 		int markerIndex = 0;
 		while (it.hasNext()) {
-			Marker marker = (Marker) it.next();
+			Marker marker = it.next();
 			final int location = marker.getLocation();
 
 			final int x = x0 + (int) Math.round(location * xScale);
@@ -258,14 +260,14 @@ public class WaveformPanel extends JPanel {
 	public void export(String prefix) throws Exception {
 		final String name = prefixProposal(prefix, 10);
 		final File path = file.getParentFile();
-		final List slices = slicer.exportSlices(path, name);
+		final List<File> slices = slicer.exportSlices(path, name);
 		final File midiFile = new File(path, name + ".mid");
 		markers.exportMidiSequence(midiFile, MIDI_PPQ);
 
 		// final File file = new File("chromatic.pgm");
 		final Program pgm = Program.open(getClass().getResourceAsStream("chromatic.pgm"));
 		for (int i = 0; i < slices.size() && i < 64; i++) {
-			final File slice = (File) slices.get(i);
+			final File slice = slices.get(i);
 			final Pad pad = pgm.getPad(i);
 			final String sampleName = shortName(slice.getName());
 			final com.mpcmaid.pgm.Layer layer0 = pad.getLayer(0);

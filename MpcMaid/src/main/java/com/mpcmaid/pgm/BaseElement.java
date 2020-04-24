@@ -120,7 +120,7 @@ public abstract class BaseElement implements Element {
 	 * Copies every parameter value of the given source element into this
 	 * element, except for the given set of parameters to ignore
 	 */
-	public void copyFrom(BaseElement source, Set ignoreParams) {
+	public void copyFrom(BaseElement source, Set<Parameter> ignoreParams) {
 		final Parameter[] ps = getParameters();
 		for (int i = 0; i < ps.length; i++) {
 			final Parameter parameter = ps[i];

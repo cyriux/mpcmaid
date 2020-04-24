@@ -97,7 +97,7 @@ public final class Pad extends BaseElement {
 
 	public Object get(Parameter parameter) {
 		if (parameter.equals(PAD_MIDI_NOTE_VALUE)) {
-			return new Integer(getPadMidiNote() - 35);
+			return Integer.valueOf(getPadMidiNote() - 35);
 		}
 		return super.get(parameter);
 	}
@@ -113,7 +113,7 @@ public final class Pad extends BaseElement {
 	/**
 	 * Copies every parameter from the given source element, ignoring parameters given in the Set ignoreParams
 	 */
-	public void copyFrom(BaseElement source, Set ignoreParams) {
+	public void copyFrom(BaseElement source, Set<Parameter> ignoreParams) {
 		final Pad sourcePad = (Pad) source;
 
 		super.copyFrom(sourcePad, ignoreParams);

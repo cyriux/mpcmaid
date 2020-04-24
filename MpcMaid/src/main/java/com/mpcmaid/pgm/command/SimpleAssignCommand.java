@@ -1,5 +1,6 @@
 package com.mpcmaid.pgm.command;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -19,13 +20,13 @@ import com.mpcmaid.pgm.Sample.Status;
  */
 public class SimpleAssignCommand extends ImportCommand {
 
-	private final List samples = new ArrayList();
+	private final List<Sample> samples = new ArrayList<>();
 
 	private final Pad selectedPad;
 
 	private final boolean perPad;
 
-	public SimpleAssignCommand(Status errorPolicy, List files, Pad selectedPad, boolean perPad) {
+	public SimpleAssignCommand(Status errorPolicy, List<File> files, Pad selectedPad, boolean perPad) {
 		super(errorPolicy, files);
 		this.perPad = perPad;
 		this.selectedPad = selectedPad;
@@ -35,15 +36,15 @@ public class SimpleAssignCommand extends ImportCommand {
 		samples.add(sample);
 	}
 
-	public Object execute(SampleMatrix matrix) {
-		final List impactedPads = new ArrayList();
+	public List<Pad> execute(SampleMatrix matrix) {
+		final List<Pad> impactedPads = new ArrayList<>();
 		final Program program = (Program) selectedPad.getParent();
 		final int from = selectedPad.getElementIndex();
 
 		// fills internal list
 		importFiles();
 
-		Iterator it = samples.iterator();
+		Iterator<Sample> it = samples.iterator();
 
 		final int n = program.getPadNumber();
 		for (int i = from; i < n; i++) {

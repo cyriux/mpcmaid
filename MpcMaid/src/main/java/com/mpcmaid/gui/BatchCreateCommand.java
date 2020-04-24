@@ -58,7 +58,7 @@ public class BatchCreateCommand {
 
 	private void createPaginatedPrograms(File path, final File[] memberFiles) {
 		// create as many programs needed to fill the m pads
-		List list = new ArrayList();
+		List<File> list = new ArrayList<>();
 		int page = 1;
 
 		// constructs the folder name by escaping the path name plus a number to
@@ -84,7 +84,7 @@ public class BatchCreateCommand {
 		createProgram(pgm, new File(path, listingName + page + ".pgm"), list);
 	}
 
-	private void createProgram(Program templatePgm, File newPgmFile, List files) {
+	private void createProgram(Program templatePgm, File newPgmFile, List<File> files) {
 		if (files.isEmpty()) {
 			return;
 		}
@@ -92,10 +92,10 @@ public class BatchCreateCommand {
 		final Program newPgm = new Program(templatePgm);
 
 		// import files and assign them to each pad (first layer) in turn
-		Iterator it = files.iterator();
+		Iterator<File> it = files.iterator();
 		int i = 0;
 		while (it.hasNext()) {
-			final File file = (File) it.next();
+			final File file = it.next();
 			importCount++;
 			final Sample sample = Sample.importFile(file, 16, Sample.RENAMED, true, renameCount);
 			if (sample == null || sample.isRejected()) {

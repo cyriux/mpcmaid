@@ -93,8 +93,8 @@ public final class MPCMaid {
 						e.printStackTrace();
 					}
 				}
-				//baseFrame.setVisible(true);
-				baseFrame.show();
+				baseFrame.setVisible(true);
+				//baseFrame.show();
 
 				hideSplash();
 			}

@@ -6,7 +6,7 @@ package com.mpcmaid.audio;
  * 
  * @author cyrille martraire
  */
-public final class Marker implements Comparable {
+public final class Marker implements Comparable<Marker> {
 	private int location;
 
 	public Marker(int location) {
@@ -32,8 +32,8 @@ public final class Marker implements Comparable {
 		return new Marker(location);
 	}
 
-	public int compareTo(Object o) {
-		final Marker other = (Marker) o;
+	public int compareTo(Marker o) {
+		final Marker other = o;
 		return location - other.location;
 	}
 

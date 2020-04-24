@@ -14,9 +14,9 @@ import com.mpcmaid.pgm.Sample.Status;
 public class ImportCommandTest extends TestCase {
 
 	public static final class SampleList extends ImportCommand {
-		private final List list = new ArrayList();
+		private final List<Sample> list = new ArrayList<>();
 
-		public SampleList(Status errorPolicy, List files) {
+		public SampleList(Status errorPolicy, List<File> files) {
 			super(errorPolicy, files);
 			importFiles();
 		}

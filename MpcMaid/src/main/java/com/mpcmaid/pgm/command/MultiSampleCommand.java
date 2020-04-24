@@ -1,5 +1,6 @@
 package com.mpcmaid.pgm.command;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -20,11 +21,11 @@ import com.mpcmaid.pgm.Sample.Status;
  */
 public class MultiSampleCommand extends ImportCommand {
 
-	private final List samples = new ArrayList();
+	private final List<Sample> samples = new ArrayList<>();
 
 	private final Program pgm;
 
-	public MultiSampleCommand(Status errorPolicy, List files, Program pgm) {
+	public MultiSampleCommand(Status errorPolicy, List<File> files, Program pgm) {
 		super(errorPolicy, files);
 		this.pgm = pgm;
 	}
@@ -33,7 +34,7 @@ public class MultiSampleCommand extends ImportCommand {
 		samples.add(sample);
 	}
 
-	public Object execute(SampleMatrix matrix) {
+	public Collection<Pad> execute(SampleMatrix matrix) {
 		// process raw files (rename, reject etc)
 		importFiles();
 
@@ -49,7 +50,7 @@ public class MultiSampleCommand extends ImportCommand {
 		}
 
 		// assign
-		final Collection impactedPads = new ArrayList();
+		final Collection<Pad> impactedPads = new ArrayList<>();
 		for (int i = 0; i < multisample.length; i++) {
 			Slot slot = multisample[i];
 			if (slot != null) {

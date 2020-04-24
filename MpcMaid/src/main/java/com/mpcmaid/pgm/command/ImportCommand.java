@@ -17,7 +17,7 @@ import com.mpcmaid.pgm.Sample.Status;
  */
 public abstract class ImportCommand implements SampleCommand {
 
-	private final List files;
+	private final List<File> files;
 
 	private final Status errorPolicy;
 
@@ -27,7 +27,7 @@ public abstract class ImportCommand implements SampleCommand {
 
 	protected int rejectedCount;
 
-	public ImportCommand(Status errorPolicy, List files) {
+	public ImportCommand(Status errorPolicy, List<File> files) {
 		this.errorPolicy = errorPolicy;
 		this.files = files;
 	}
@@ -61,7 +61,7 @@ public abstract class ImportCommand implements SampleCommand {
 	 * an extension other than .wav, renaming file names too long)
 	 */
 	protected void importFiles() {
-		Iterator it = files.iterator();
+		Iterator<File> it = files.iterator();
 		while (it.hasNext()) {
 			final File file = (File) it.next();
 			importCount++;

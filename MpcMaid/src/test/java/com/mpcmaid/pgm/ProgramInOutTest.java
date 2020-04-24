@@ -36,8 +36,8 @@ public class ProgramInOutTest extends TestCase {
 	 * 
 	 * @return A Collection of every impacted pad
 	 */
-	public Collection copyPadParameters(Program pgm, Pad sourcePad, final int fromPad, final int toPad, Set ignoreParams) {
-		final Collection impactedPads = new ArrayList();
+	public Collection<Pad> copyPadParameters(Program pgm, Pad sourcePad, final int fromPad, final int toPad, Set<Parameter> ignoreParams) {
+		final Collection<Pad> impactedPads = new ArrayList<>();
 		for (int i = fromPad; i < toPad; i++) {
 			final Pad pad = pgm.getPad(i);
 			pad.copyFrom(sourcePad, ignoreParams);
@@ -53,7 +53,7 @@ public class ProgramInOutTest extends TestCase {
 
 		pgm.save(new File("copyFrom1.pgm"));
 
-		final HashSet ignoreParams = new HashSet();
+		final HashSet<Parameter> ignoreParams = new HashSet<>();
 		ignoreParams.add(Pad.PAD_MIDI_NOTE_VALUE);
 		pgm = Program.open(getClass().getResourceAsStream("test.pgm"));
 		copyPadParameters(pgm, currentlySelectedPad, 3, 12, ignoreParams);

@@ -29,7 +29,9 @@ import com.mpcmaid.pgm.Parameter.Type;
  * 
  * @author cyrille martraire
  */
-public abstract class Widget extends JPanel implements ActionListener, FocusListener, BindingCapable {
+public abstract class Widget<T extends JComponent> extends JPanel implements ActionListener, FocusListener, BindingCapable {
+
+	private static final long serialVersionUID = -532729841296280652L;
 
 	private static final Font MEDIUM_FONT = new Font("Verdana", Font.PLAIN, 12);
 
@@ -37,7 +39,7 @@ public abstract class Widget extends JPanel implements ActionListener, FocusList
 
 	protected final Parameter parameter;
 
-	protected JComponent value;
+	protected T value;
 
 	public Widget(Element element, Parameter parameter) {
 		super();
@@ -122,7 +124,9 @@ public abstract class Widget extends JPanel implements ActionListener, FocusList
 		return "Presentation: " + element + " " + parameter;
 	}
 
-	public static class IntegerField extends Widget {
+	public static class IntegerField extends Widget<JTextField> {
+
+		private static final long serialVersionUID = 3709006660547691155L;
 
 		public IntegerField(Element element, Parameter parameter) {
 			super(element, parameter);
@@ -151,7 +155,7 @@ public abstract class Widget extends JPanel implements ActionListener, FocusList
 
 		public void save() {
 			final String text = getTextField().getText();
-			final Integer v = new Integer(text);
+			final Integer v = Integer.valueOf(text);
 			check(v);
 			element.set(parameter, v);
 		}
@@ -162,7 +166,9 @@ public abstract class Widget extends JPanel implements ActionListener, FocusList
 
 	}
 
-	public static class StringField extends Widget {
+	public static class StringField extends Widget<JTextField> {
+
+		private static final long serialVersionUID = 3200524341632520173L;
 
 		public StringField(Element element, Parameter parameter) {
 			super(element, parameter);
@@ -177,7 +183,7 @@ public abstract class Widget extends JPanel implements ActionListener, FocusList
 
 			getTextField().addActionListener(this);
 			getTextField().addFocusListener(this);
-			getTextField().enable(false);
+			getTextField().setEnabled(false);
 			load();
 		}
 
@@ -201,7 +207,9 @@ public abstract class Widget extends JPanel implements ActionListener, FocusList
 		}
 	}
 
-	public static class RangeField extends Widget {
+	public static class RangeField extends Widget<JTextField> {
+
+		private static final long serialVersionUID = 5633564907524431966L;
 
 		private JTextField value2;
 
@@ -230,7 +238,7 @@ public abstract class Widget extends JPanel implements ActionListener, FocusList
 
 		protected void check(final Object o) {
 			final Range range = (Range) o;
-			if (!validate(new Integer(range.getLow()))) {
+			if (!validate(Integer.valueOf(range.getLow()))) {
 				final String msg = "Invalid " + getLabel() + " value: " + range.getLow() + ".";
 				System.err.println(msg);
 
@@ -238,7 +246,7 @@ public abstract class Widget extends JPanel implements ActionListener, FocusList
 				Toolkit.getDefaultToolkit().beep();
 				return;
 			}
-			if (!validate(new Integer(range.getHigh()))) {
+			if (!validate(Integer.valueOf(range.getHigh()))) {
 				final String msg = "Invalid " + getLabel() + " value: " + range.getHigh() + ".";
 				System.err.println(msg);
 
@@ -284,7 +292,9 @@ public abstract class Widget extends JPanel implements ActionListener, FocusList
 
 	}
 
-	public static class ComboField extends Widget {
+	public static class ComboField extends Widget<JComboBox<String>> {
+
+		private static final long serialVersionUID = 1116472605960451997L;
 
 		public ComboField(Element element, Parameter parameter) {
 			super(element, parameter);
@@ -293,7 +303,7 @@ public abstract class Widget extends JPanel implements ActionListener, FocusList
 
 		protected void setupValue() {
 			final EnumType type = (EnumType) parameter.getType();
-			value = new JComboBox(type.getValues());
+			value = new JComboBox<String>(type.getValues());
 			value.setAlignmentX(LEFT_ALIGNMENT);
 			value.setFont(MEDIUM_FONT);
 			add(value);
@@ -302,8 +312,8 @@ public abstract class Widget extends JPanel implements ActionListener, FocusList
 			load();
 		}
 
-		private JComboBox getComboBox() {
-			return (JComboBox) value;
+		private JComboBox<String> getComboBox() {
+			return (JComboBox<String>) value;
 		}
 
 		public void load() {
@@ -313,7 +323,7 @@ public abstract class Widget extends JPanel implements ActionListener, FocusList
 
 		public void save() {
 			final int selection = getComboBox().getSelectedIndex();
-			final Integer sel = new Integer(selection);
+			final Integer sel = Integer.valueOf(selection);
 			check(sel);
 			element.set(parameter, sel);
 		}
@@ -323,8 +333,10 @@ public abstract class Widget extends JPanel implements ActionListener, FocusList
 		}
 	}
 
-	public static class OffIntegerField extends Widget {
+	public static class OffIntegerField extends Widget<JComboBox<String>> {
 
+		private static final long serialVersionUID = -454582028253676511L;
+		
 		private String[] values;
 
 		public OffIntegerField(Element element, Parameter parameter, String[] values) {
@@ -339,7 +351,7 @@ public abstract class Widget extends JPanel implements ActionListener, FocusList
 		}
 
 		protected void setupValuePost() {
-			value = new JComboBox(values);
+			value = new JComboBox<String>(values);
 			value.setAlignmentX(LEFT_ALIGNMENT);
 			value.setFont(MEDIUM_FONT);
 			add(value);
@@ -349,8 +361,8 @@ public abstract class Widget extends JPanel implements ActionListener, FocusList
 			load();
 		}
 
-		private JComboBox getComboBox() {
-			return (JComboBox) value;
+		private JComboBox<String> getComboBox() {
+			return (JComboBox<String>) value;
 		}
 
 		public void load() {
@@ -360,7 +372,7 @@ public abstract class Widget extends JPanel implements ActionListener, FocusList
 
 		public void save() {
 			final int selection = getComboBox().getSelectedIndex();
-			final Integer sel = new Integer(selection);
+			final Integer sel = Integer.valueOf(selection);
 			check(sel);
 			element.set(parameter, sel);
 		}
@@ -370,7 +382,9 @@ public abstract class Widget extends JPanel implements ActionListener, FocusList
 		}
 	}
 
-	public static class TuningField extends Widget {
+	public static class TuningField extends Widget<JTextField> {
+
+		private static final long serialVersionUID = -1579155864749957680L;
 
 		public TuningField(Layer element, Parameter parameter) {
 			super(element, parameter);
@@ -412,7 +426,7 @@ public abstract class Widget extends JPanel implements ActionListener, FocusList
 
 		public void save() {
 			final String text = getTextField().getText();
-			final Double v = new Double(text);
+			final Double v = Double.valueOf(text);
 
 			if (!parameter.getType().validate(v)) {
 				onError();

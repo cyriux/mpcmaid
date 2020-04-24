@@ -13,7 +13,6 @@
 
 package com.centerkey.utils;
 
-import java.io.IOException;
 import java.lang.reflect.Method;
 import javax.swing.JOptionPane;
 
@@ -25,7 +24,7 @@ public class BareBonesBrowserLaunch {
 		String osName = System.getProperty("os.name");
 		try {
 			if (osName.startsWith("Mac OS")) {
-				Class fileMgr = Class.forName("com.apple.eio.FileManager");
+				Class<?> fileMgr = Class.forName("com.apple.eio.FileManager");
 				Method openURL = fileMgr.getDeclaredMethod("openURL", new Class[] { String.class });
 				openURL.invoke(null, new Object[] { url });
 			} else if (osName.startsWith("Windows"))

@@ -80,7 +80,7 @@ public class Parameter {
 
 		public Object get(BaseElement element, Parameter parameter) {
 			final byte b = element.getBuffer().getByte(parameter.getOffset());
-			return new Integer(b);
+			return Integer.valueOf(b);
 		}
 
 		public void set(BaseElement element, Parameter parameter, Object value) {
@@ -159,7 +159,7 @@ public class Parameter {
 
 		public Object get(BaseElement element, Parameter parameter) {
 			final byte b = element.getBuffer().getByte(parameter.getOffset());
-			return new Integer(b);
+			return Integer.valueOf(b);
 		}
 
 		public void set(BaseElement element, Parameter parameter, Object value) {

@@ -115,8 +115,8 @@ public class ProgramSamples extends SampleMatrix {
 		set(layer, null);
 	}
 
-	public Collection removeAllSamples(Program program) {
-		final List impactedPads = new ArrayList();
+	public Collection<Pad> removeAllSamples(Program program) {
+		final List<Pad> impactedPads = new ArrayList<>();
 		final int n = program.getPadNumber();
 		for (int i = 0; i < n; i++) {
 			final Pad pad = program.getPad(i);

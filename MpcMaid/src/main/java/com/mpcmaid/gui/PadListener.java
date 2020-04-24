@@ -12,6 +12,8 @@ import java.awt.event.FocusListener;
  */
 public class PadListener extends FileDragHandler implements ActionListener, FocusListener {
 
+	private static final long serialVersionUID = 8106993173333818375L;
+
 	public void actionPerformed(ActionEvent arg0) {
 	}
 
