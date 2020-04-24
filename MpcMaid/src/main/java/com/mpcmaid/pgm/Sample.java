@@ -166,6 +166,14 @@ public final class Sample {
 		Utils.copy(actualFile, dst);
 	}
 
+	public void convertTo(File dir) throws IOException {
+		final File dst = getDestinationFile(dir);
+		if (dst == null) {
+			return;
+		}
+		Utils.resample(actualFile, dst);
+	}
+
 	public void play() {
 		if (actualFile != null) {
 			SamplePlayer.getInstance().play(actualFile);

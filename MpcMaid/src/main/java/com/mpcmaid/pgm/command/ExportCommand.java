@@ -30,7 +30,7 @@ public final class ExportCommand implements SampleCommand {
 			Sample sample = it.next();
 			expected++;
 			try {
-				sample.copyTo(dir);
+				sample.convertTo(dir);
 				exported++;
 			} catch (IOException e) {
 				e.printStackTrace();
