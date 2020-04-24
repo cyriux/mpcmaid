@@ -11,6 +11,6 @@ jobs:
         with:
           java-version: 1.8
       - name: Publish package
-        run: mvn -B deploy --file MpcMaid/pom.xml -s $GITHUB_WORKSPACE/settings.xml
+        run: mvn -B deploy --file MpcMaid/pom.xml
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
